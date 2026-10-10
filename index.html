@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Stock Portfolio Tracker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3a8a;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        .stocks {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(120px, 1fr));
+
+            gap: 10px;
+        }
+
+        .stock-box {
+            background: #e8f0ff;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .stock-box strong {
+            display: block;
+            font-size: 18px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        select,
+        input,
+        button {
+            padding: 12px;
+            margin: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .remove {
+            background: #dc2626;
+        }
+
+        .remove:hover {
+            background: #b91c1c;
+        }
+
+        .clear {
+            background: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #eef2f7;
+        }
+
+        .total {
+            margin-top: 25px;
+            padding: 20px;
+            background: #dcfce7;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .info {
+            text-align: center;
+            color: #666;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>📈 Stock Portfolio Tracker</h1>
+
+        <p class="info">
+            Python Programming Project using Flask
+        </p>
+
+
+        <h2>Available Stocks</h2>
+
+        <div class="stocks">
+
+            {% for stock, price in stocks.items() %}
+
+            <div class="stock-box">
+
+                <strong>{{ stock }}</strong>
+
+                ${{ price }}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <h2>Add Stock</h2>
+
+        <form action="/add" method="POST">
+
+            <select name="stock">
+
+                {% for stock in stocks %}
+
+                <option value="{{ stock }}">
+                    {{ stock }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <input
+                type="number"
+                name="quantity"
+                placeholder="Quantity"
+                min="1"
+                required
+            >
+
+
+            <button type="submit">
+                Add Stock
+            </button>
+
+        </form>
+
+
+        <h2>Portfolio Summary</h2>
+
+        <table>
+
+            <tr>
+
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Investment</th>
+                <th>Action</th>
+
+            </tr>
+
+
+            {% if portfolio %}
+
+                {% for item in portfolio %}
+
+                <tr>
+
+                    <td>
+                        <strong>{{ item.stock }}</strong>
+                    </td>
+
+                    <td>
+                        ${{ item.price }}
+                    </td>
+
+                    <td>
+                        {{ item.quantity }}
+                    </td>
+
+                    <td>
+                        ${{ item.investment }}
+                    </td>
+
+                    <td>
+
+                        <a href="/remove/{{ item.stock }}">
+
+                            <button class="remove">
+                                Remove
+                            </button>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="5">
+                        No stocks added yet.
+                    </td>
+
+                </tr>
+
+            {% endif %}
+
+        </table>
+
+
+        <div class="total">
+
+            Total Investment:
+            ${{ total }}
+
+        </div>
+
+
+        <div style="text-align:center; margin-top:20px;">
+
+            <a href="/clear">
+
+                <button class="clear">
+                    Clear Portfolio
+                </button>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+
